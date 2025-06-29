@@ -49,9 +49,10 @@ app.post("/webhook" ,async (req, res) => {
     const { studentname, fathername, coursename, email, contact, cnic } = agent.parameters;
 
     // ✅ Respond to Dialogflow within 5 seconds
-    agent.add(`✅ Thank you, ${studentname.name}. Your registration for ${coursename} is complete.`);
-    agent.add(`📧 Confirmation will be sent to: ${email}`);
-    agent.add(`📱 Contact: ${contact}, CNIC: ${cnic}, Father's Name: ${fathername}`);
+    agent.add(`✅ Thank you, ${studentname.name}. Your registration for ${coursename} is complete.
+      📧 Confirmation will be sent to: ${email}
+      📱 Contact: ${contact}, CNIC: ${cnic}, Father's Name: ${fathername.name}
+      `);
 
     // 🚀 Background email + WhatsApp sending
     setTimeout(async () => {
@@ -89,7 +90,7 @@ app.post("/webhook" ,async (req, res) => {
           <div style="width: 100%; height: 60px; background: linear-gradient(90deg, #004aad, #45c62d);"></div>
           <div style="padding: 20px; font-size: 14px; color: #333;">
             <p><strong>Name:</strong> ${studentname.name}</p>
-            <p><strong>Father's Name:</strong> ${fathername}</p>
+            <p><strong>Father's Name:</strong> ${fathername.name}</p>
             <p><strong>CNIC:</strong> ${cnic}</p>
             <p><strong>Course:</strong> ${coursename}</p> 
             <div style="text-align: center; margin-top: 20px;">
