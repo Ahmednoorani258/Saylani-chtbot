@@ -1,4 +1,4 @@
-const User = require("./db/models/user");
+const User = require("../db/models/user");
 
 module.exports = async function handleWebhook(req, res) {
   const intent = req.body.queryResult.intent.displayName;
