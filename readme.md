@@ -40,15 +40,4 @@ This is a fully functional Dialogflow ES chatbot created for Saylani Mass IT Tra
 | AI           | Gemini Pro API (Google)|
 | Deployment   | Railway.app            |
 
----
-
-## 🌐 Webhook Deployment
-
-Your webhook is hosted on:  
-**`https://yourapp.up.railway.app/webhook`**  
-(Replace with your live URL)
-
----
-
-## 📁 Project Structure
 
