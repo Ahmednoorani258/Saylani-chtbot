@@ -43,77 +43,35 @@ app.post("/webhook", require("./webhook/index") ,async (req, res) => {
   }
 
   async function registration(agent) {
-    const { studentname, fathername, coursename, email, contact,cnic } =
-      agent.parameters;
-    const emailMessage = `Hello ${studentname.name}, I will send an email to ${email}`;
-    agent.add(emailMessage);
-
-    try {
-      const info = await transporter.sendMail({
-        from: '"ahmednoorani" <ahmednoorani258@gmail.com>',
-        to: email,
-        subject: "Hello ✔",
-        // text: "Hello world?", // plain‑text body
-        html: `<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 30px;">
-  <table align="center" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; margin: auto;">
-    <tr>
-      <!-- Front Side -->
-      <td style="vertical-align: top; padding: 10px;">
-        <div style="width: 100%; max-width: 270px; height: 420px; border-radius: 12px; overflow: hidden; border: 1px solid #ccc; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: auto;">
-          <div style="width: 100%; height: 60px; background: linear-gradient(90deg, #004aad, #45c62d);"></div>
-          <div style="text-align: center; margin-top: -30px;">
-            <img src="https://api.dicebear.com/7.x/initials/png?seed=${encodeURIComponent(
-              studentname.name
-            )}" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #004aad; background: #fff;">
-            <h2 style="margin: 10px 0 5px; font-size: 18px; color: #004aad;">${studentname.name}</h2>
-            <p style="font-size: 14px; color: #555;">${coursename}</p>
-            <p style="font-weight: bold; margin-top: 5px; color: #222;">GD-${randomnumbgn()}</p>
-          </div>
-          <div style="margin-top: auto; width: 100%; text-align: center; background: #e5f2ff; padding: 10px; font-size: 12px; font-weight: bold; color: #004aad;">
-            SAYLANI MASS IT TRAINING PROGRAM
-          </div>
-          <div style="width: 100%; height: 30px; background: linear-gradient(to right, #004aad, #45c62d);"></div>
-        </div>
-      </td>
-
-      <!-- Back Side -->
-      <td style="vertical-align: top; padding: 10px;">
-        <div style="width: 100%; max-width: 270px; height: 420px; border-radius: 12px; overflow: hidden; border: 1px solid #ccc; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: auto;">
-          <div style="width: 100%; height: 60px; background: linear-gradient(90deg, #004aad, #45c62d);"></div>
-          <div style="padding: 20px; font-size: 14px; color: #333;">
-            <p><strong>Name:</strong> ${studentname.name}</p>
-            <p><strong>Father's Name:</strong> ${fathername}</p>
-            <p><strong>CNIC:</strong> ${cnic}</p>
-            <p><strong>Course:</strong> ${coursename}</p> 
-            <div style="text-align: center; margin-top: 20px;">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?data=SMIT&size=100x100" alt="QR Code" style="border: 1px solid #ccc; padding: 5px;">
-            </div>
-            <p style="font-size: 11px; margin-top: 15px; text-align: center; color: #666;"><strong>Note:</strong> This card is valid only within SMIT premises. Please return if found.</p>
-          </div>
-          <div style="width: 100%; height: 30px; background: linear-gradient(to right, #004aad, #45c62d); text-align: center; color: white; font-size: 12px; line-height: 30px;">
-            Issuing Authority - SMIT
-          </div>
-        </div>
-      </td>
-    </tr>
-  </table>
-</body>
-`, // HTML body
-      });
-      console.log("Message sent:", info.messageId);
-
-      const message = await client.messages.create({
-        from: "whatsapp:+14155238886",
-        body: `Hello ${studentname.name}, thanks for registering. We have sent an email to ${email}. with your registration details.`,
-        to: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
-      });
-      console.log("WhatsApp sent:", message.sid);
-    } catch (error) {
-      console.error("Error in email or WhatsApp:", error);
-      agent.add(
-        "There was an error sending your message. Please try again later."
-      );
-    }
+    const { studentname, fathername, coursename, email, contact, cnic } = agent.parameters;
+  
+    // ✅ Immediately respond to Dialogflow to avoid timeout
+    agent.add(`✅ Thank you, ${studentname.name}. You're registered for the ${coursename} course!`);
+    agent.add(`📧 A confirmation email will be sent to ${email}`);
+  
+    // ✅ Run heavy tasks separately so Dialogflow doesn't wait
+    setTimeout(async () => {
+      try {
+        // Send email
+        const info = await transporter.sendMail({
+          from: '"Saylani" <ahmednoorani258@gmail.com>',
+          to: email,
+          subject: "Registration Confirmation",
+          html: `<p>Hello ${studentname.name},<br>You are registered for <strong>${coursename}</strong>. Thank you!</p>`,
+        });
+        console.log("✅ Email sent:", info.messageId);
+  
+        // Send WhatsApp
+        const message = await client.messages.create({
+          from: "whatsapp:+14155238886",
+          body: `Hello ${studentname.name}, you're registered for ${coursename}. Confirmation sent to ${email}.`,
+          to: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`, // Format: whatsapp:+92xxxxxx
+        });
+        console.log("✅ WhatsApp sent:", message.sid);
+      } catch (error) {
+        console.error("❌ Error sending email or WhatsApp:", error);
+      }
+    }, 0); // 🚀 async task after response
   }
 
   async function handleFeedback(req, res) {
