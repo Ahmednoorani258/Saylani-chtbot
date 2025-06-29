@@ -59,7 +59,7 @@ app.post("/webhook" ,async (req, res) => {
       try {
         // send email
         const info = await transporter.sendMail({
-          from: '"Saylani IT" <ahmednoorani258@gmail.com>',
+          from: '"Saylani Mass IT Training (SMIT)" <ahmednoorani258@gmail.com>',
           to: email,
           subject: "Registration Confirmation",
           html: `<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 30px;">
