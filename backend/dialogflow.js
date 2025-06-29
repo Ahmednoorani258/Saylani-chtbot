@@ -84,7 +84,7 @@ app.post("/webhook", require("./webhook/index") ,async (req, res) => {
             <p><strong>Name:</strong> ${studentname.name}</p>
             <p><strong>Father's Name:</strong> ${fathername}</p>
             <p><strong>CNIC:</strong> ${cnic}</p>
-            <p><strong>Course:</strong> ${coursename}</p>
+            <p><strong>Course:</strong> ${coursename}</p> 
             <div style="text-align: center; margin-top: 20px;">
               <img src="https://api.qrserver.com/v1/create-qr-code/?data=SMIT&size=100x100" alt="QR Code" style="border: 1px solid #ccc; padding: 5px;">
             </div>
