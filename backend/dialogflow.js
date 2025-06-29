@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-app.post("/webhook", require("./webhook/index") ,async (req, res) => {
+app.post("/webhook" ,async (req, res) => {
   var id = res.req.body.session.substr(43);
   console.log(id);
   const agent = new WebhookClient({ request: req, response: res });
