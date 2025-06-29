@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai"); // Gemini SDK
-const Feedback = require("../db/models/Feedback"); // Your MongoDB schema
+const Feedback = require("./db/models/Feedback"); // Your MongoDB schema
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
